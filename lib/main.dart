@@ -1,6 +1,7 @@
+// main.dart
 import 'package:flutter/material.dart';
-import 'package:coffee/drawer_and_update_delete_screen.dart'; // Import the DrawerScreen
-import 'package:coffee/menu_screen.dart'; // Import the MenuScreen
+import 'package:coffee/drawer_screen.dart';
+import 'package:coffee/menu_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,14 +14,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Coffee Shop',
       theme: ThemeData(
-        primaryColor: Colors.brown[100], // Beige
+        primaryColor: Colors.brown[100],
         appBarTheme: AppBarTheme(
-          color: Colors.brown[400], // Brown
+          color: Colors.brown[400],
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.white, // Dark Brown
+              Colors.white,
             ),
           ),
         ),

@@ -1,7 +1,9 @@
+// menu_screen.dart
 import 'package:flutter/material.dart';
-import 'drawer_and_update_delete_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:coffee/drawer_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   @override
@@ -9,18 +11,17 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  // Define a callback function to refresh menu items
-  void refreshMenu() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu'),
       ),
-      drawer: DrawerAndUpdateDeleteScreen(onMenuRefresh: refreshMenu), // Use the combined screen
+      drawer: DrawerScreen(
+        onMenuRefresh: () {
+          setState(() {}); // Refresh the menu screen's state
+        },
+      ),
       body: MenuBody(),
     );
   }
@@ -52,75 +53,76 @@ class _MenuBodyState extends State<MenuBody> {
           return Center(child: Text('Error: Failed to load menu items'));
         } else {
           List<dynamic> menuItems = snapshot.data!;
-          List<dynamic> primaryItems =
-          menuItems.take(5).toList(); // Get first 5 items as primary items
-          List<dynamic> remainingItems =
-          menuItems.skip(5).toList(); // Get remaining items
+          List<dynamic> primaryItems = menuItems.take(5).toList();
+          List<dynamic> remainingItems = menuItems.skip(5).toList();
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Carousel section for primary items
               SizedBox(
                 height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: primaryItems.length,
-                  itemBuilder: (context, index) {
-                    var item = primaryItems[index];
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                item['image_url'],
-                                fit: BoxFit.cover,
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.7,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                  ),
+                  items: primaryItems.map((item) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    item['image_url'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(height: 8),
+                              Text(
+                                item['name'],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                item['description'],
+                                style: TextStyle(fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                '\$${item['price']}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            item['name'],
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            item['description'],
-                            style: TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            '\$${item['price']}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.brown,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     );
-                  },
+                  }).toList(),
                 ),
               ),
-
-              // List of remaining items
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
                 itemCount: remainingItems.length,
                 itemBuilder: (context, index) {
                   var item = remainingItems[index];
