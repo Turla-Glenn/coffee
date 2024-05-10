@@ -1,4 +1,3 @@
-// drawer_screen.dart
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,8 +11,8 @@ class DrawerScreen extends StatelessWidget {
 
   const DrawerScreen({Key? key, required this.onMenuRefresh}) : super(key: key);
 
-  Future<void> _addMenuItem(
-      String name, String description, double price, String imagePath, BuildContext context) async {
+  Future<void> _addMenuItem(String name, String description, double price,
+      String imagePath, BuildContext context) async {
     Map<String, String> data = {
       'name': name,
       'description': description,
@@ -146,8 +145,7 @@ class DrawerScreen extends StatelessWidget {
                   onPressed: () {
                     String name = nameController.text;
                     String description = descriptionController.text;
-                    double price =
-                        double.tryParse(priceController.text) ?? 0.0;
+                    double price = double.tryParse(priceController.text) ?? 0.0;
                     String imagePath = pickedFile?.path ?? '';
 
                     if (name.isNotEmpty &&

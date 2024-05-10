@@ -1,7 +1,5 @@
-// main.dart
 import 'package:flutter/material.dart';
-import 'package:coffee/drawer_screen.dart';
-import 'package:coffee/menu_screen.dart';
+import 'package:coffee/loading_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +24,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: MenuScreen(),
+      home: LoadingScreen(), // Start with LoadingScreen
     );
   }
 }
