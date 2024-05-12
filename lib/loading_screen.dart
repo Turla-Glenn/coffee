@@ -21,9 +21,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result != ConnectivityResult.none) {
         // Reload the screen when connection is restored
-        setState(() {
-          _isConnected = true;
-        });
+        _checkConnectivity();
       }
     });
   }
@@ -51,6 +49,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
     }
   }
 
+  void _retryConnectivity() {
+    // Reset connectivity check
+    _checkConnectivity();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +63,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
           title: Text('No Internet Connection'),
           content: Text('Please check your internet connection and try again.'),
           actions: <Widget>[
+            TextButton(
+              onPressed: _retryConnectivity,
+              child: Text('Retry'),
+            ),
           ],
         )
             : Column(

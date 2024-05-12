@@ -333,7 +333,7 @@ class _UpdateDeleteBodyState extends State<UpdateDeleteBody> {
   Future<void> _editMenuItem(BuildContext context, dynamic item) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditMenuItemScreen(item: item)),
+      MaterialPageRoute(builder: (context) => EditMenuItemScreen(item: item, onMenuRefresh: widget.onMenuRefresh)),
     );
 
     if (result == true) {
@@ -461,8 +461,9 @@ class _UpdateDeleteBodyState extends State<UpdateDeleteBody> {
 
 class EditMenuItemScreen extends StatefulWidget {
   final dynamic item;
+  final VoidCallback onMenuRefresh;
 
-  const EditMenuItemScreen({Key? key, required this.item}) : super(key: key);
+  const EditMenuItemScreen({Key? key, required this.item, required this.onMenuRefresh}) : super(key: key);
 
   @override
   _EditMenuItemScreenState createState() => _EditMenuItemScreenState();
@@ -566,6 +567,7 @@ class _EditMenuItemScreenState extends State<EditMenuItemScreen> {
           content: Text('Menu item updated successfully'),
         ),
       );
+      widget.onMenuRefresh(); // Trigger menu refresh
       Navigator.of(context).pop(true); // Signal successful update
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
